@@ -16,27 +16,11 @@
 #
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
-import logging
 
-import combo
-
-MIME_TYPES = {
-    'js' : 'application/javascript',
-    'css' : 'text/css'
-}
-
-class MainHandler(webapp.RequestHandler):
-    def get(self):
-        file_list = self.request.arguments()
-        split_file = file_list[0].split('.')
-        mime_type = MIME_TYPES[str(split_file[len(split_file) - 1])]
-        self.response.headers.add_header('Content-Type', mime_type)
-        self.response.out.write(combo.combine(self.request.arguments()))
-
+from combo import ComboHandler
 
 def main():
-    application = webapp.WSGIApplication([('/', MainHandler)],
-                                         debug=True)
+    application = webapp.WSGIApplication([('/', ComboHandler)], debug=True)
     util.run_wsgi_app(application)
 
 
